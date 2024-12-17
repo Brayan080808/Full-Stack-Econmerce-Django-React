@@ -114,12 +114,12 @@ WSGI_APPLICATION = 'Backend.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
+DATABASE_URL = os.environ.get('DATABASE_URL', default='postgresql://postgres:postgre@localhost:5432/mySite')
+
+
 DATABASES = {
-    'default': dj_database_url.config(
-        # Replace this value with your local database's connection string.
-        default='postgresql://postgres:postgre@localhost:5432/mySite',
-        conn_max_age=600
-    )
+        'default': dj_database_url.config(default=DATABASE_URL,
+        conn_max_age=600)
 }
 
 
