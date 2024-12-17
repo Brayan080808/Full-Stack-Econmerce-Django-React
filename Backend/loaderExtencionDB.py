@@ -1,13 +1,20 @@
 import psycopg2
 from psycopg2 import sql
 import os
+from urllib.parse import urlparse
 
+
+print(os.environ.get('DATABASE_URL'))
+
+DATABASE_URL = os.environ.get('DATABASE_URL')
+url = urlparse(DATABASE_URL)
 
 # Variables de conexión
-DATABASE_NAME = os.environ.get('DATABASE_NAME', default='freshshop') # Reemplaza con el nombre de tu base de datos
-HOST = os.environ.get('HOST', default='http://localhost:3000')             # Reemplaza con el host de tu base de datos
-USERNAME = os.environ.get('USERNAME', default='postgres')        # Reemplaza con tu nombre de usuario
-PASSWORD = os.environ.get('PASSWORD', default='080808')      # Reemplaza con tu contraseña
+
+HOST = url.hostname  # Reemplaza con el host de tu base de datos
+USERNAME = url.username        # Reemplaza con tu nombre de usuario
+PASSWORD = url.password     # Reemplaza con tu contraseña
+DATABASE_NAME = url.path[1:]
 
 def enable_pg_trgm():
     try:
