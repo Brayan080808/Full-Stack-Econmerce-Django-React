@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+  
+input[type="range"]::-webkit-slider-thumb {
+    width: 1.2rem;
+    -webkit-appearance: none;
+    pointer-events: all;
+    height: 1.2rem;
+    border: 1px solid white;
+    
+    background: #b0b435;
+    
+    border-radius: 50%;
+    
+} 
+
+ul .slick-active{
+    opacity: 40%;
+}
