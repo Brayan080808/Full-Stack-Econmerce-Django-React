@@ -8,34 +8,32 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Backend.settings')  # Cambia 'm
 django.setup()
 
 from Tienda.models import Products,Categoria_producto,Proovedores
-
 from django.contrib.auth import get_user_model
-
-Categoria_producto.objects.create(name_categoria="Frutas")
-Categoria_producto.objects.create(name_categoria="Verduras")
-Categoria_producto.objects.create(name_categoria="Tubérculos")
-Categoria_producto.objects.create(name_categoria="Legumbres")
-
-Proovedores.objects.create(name_proovedor='Mercadona',ubicacion='Espana')
-Proovedores.objects.create(name_proovedor='Assolim',ubicacion='USA')
 
 
 # Crear un superusuario
 User = get_user_model()
-username = 'bryan'  # Cambia esto al nombre de usuario deseado
-email = 'bryanayala080808@gmail.com'  # Cambia esto al correo electrónico deseado
-password = '080808'  # Cambia esto a una contraseña segura
+username = os.environ.get('ADMIN_NAME', default='ADMIN_NAME')
+  # Cambia esto al nombre de usuario deseado
+email = os.environ.get('ADMIN_EMAIL', default='ADMIN_EMAIL')  # Cambia esto al correo electrónico deseado
+password = os.environ.get('ADMIN_PASSWORD', default='ADMIN_PASSWORD')  # Cambia esto a una contraseña segura
 
 # Verificar si el superusuario ya existe
 if not User.objects.filter(username=username).exists():
     User.objects.create_superuser(username=username, email=email, password=password)
+    
     print(f'Superusuario "{username}" creado exitosamente.')
-else:
-    print(f'El superusuario "{username}" ya existe.')
+    
+    
+    Categoria_producto.objects.create(name_categoria="Frutas")
+    Categoria_producto.objects.create(name_categoria="Verduras")
+    Categoria_producto.objects.create(name_categoria="Tubérculos")
+    Categoria_producto.objects.create(name_categoria="Legumbres")
 
-
-        
-productos_data=[
+    Proovedores.objects.create(name_proovedor='Mercadona',ubicacion='Espana')
+    Proovedores.objects.create(name_proovedor='Assolim',ubicacion='USA')
+    
+    productos_data=[
     ("Cereza", "Las cerezas son pequeñas frutas rojas que ofrecen un sabor dulce o ácido, según la variedad. Ricas en antioxidantes, son ideales para combatir la inflamación y mejorar la salud cardiovascular. Puedes disfrutarlas frescas, en mermeladas o como ingrediente en postres irresistibles."),
     
     ("Grosella", "La grosella es una fruta pequeña y ácida, llena de vitamina C y antioxidantes. Su sabor único la convierte en un ingrediente perfecto para jaleas y salsas. Además, su alto contenido en fibra ayuda a la digestión, convirtiéndola en una opción saludable para tu dieta."),
@@ -117,33 +115,41 @@ productos_data=[
     ("Coco", "El coco es una fruta tropical, rica en grasas saludables y nutrientes. Su pulpa es versátil y se puede utilizar en batidos, postres o como ingrediente en platos salados. Además, el agua de coco es refrescante e hidratante, ideal para el verano."),
     
     ("Hinojo", "El hinojo es una planta con un bulbo comestible, conocido por su sabor dulce y anizado. Se puede utilizar en ensaladas, asados o como un aromático en sopas. Además, tiene propiedades digestivas y es rico en antioxidantes, beneficiando la salud general.")
-]
-# Crear productos en la base de datos
-for i, (nombre, descripcion) in enumerate(productos_data):
-    categoria = (i % 4) + 1  # Categorías del 1 al 4
-    proveedor1 = random.randint(1, 2)  # Proveedores 1 o 2
-    Products.objects.create(
-        categoria_producto=Categoria_producto.objects.get(pk=categoria),
-        proovedor=Proovedores.objects.get(pk=proveedor1),
-        name_producto=nombre,
-        descripcion=descripcion,
-        precio=round(1.50 + (i * 0.5), 2),  # Precios crecientes
-        cantidad_disponible=random.randint(1, 100),
-    )
-    
-    
-    
-imgs=['https://t4.ftcdn.net/jpg/07/28/08/63/360_F_728086378_00IvjCok2GXYK59sUXKR1d0MqS0Lf6rX.jpg', 'https://t4.ftcdn.net/jpg/00/53/14/41/360_F_53144147_Zx2dgnSeefxIjOQ5cjD4PBdZF4m8M7sm.jpg', 'https://t3.ftcdn.net/jpg/07/87/86/48/360_F_787864833_YWOHUdNX9tIMZ6kONr7P4XrQSTJ6qC2V.jpg', 'https://t3.ftcdn.net/jpg/01/89/79/16/360_F_189791663_HfB3CYN2oi7E2uKG1cY5HRRMFfiVJ3cR.jpg', 'https://t4.ftcdn.net/jpg/03/20/39/81/360_F_320398182_1X1ebszxgKyeS6j291ywWYIw1dfRLETC.jpg', 'https://t3.ftcdn.net/jpg/02/17/92/56/360_F_217925639_0sJqNCRUDHasxPZxFMFCMvMhC5lgPmSG.jpg', 'https://t4.ftcdn.net/jpg/02/95/81/79/360_F_295817910_1Suf7vho9Z55q6PxjY27NRNZj0pdh6jZ.jpg', 'https://t3.ftcdn.net/jpg/02/63/71/90/360_F_263719015_spfvo8bL0nvauJmE7Ldj4z3cvtKFj2hS.jpg', 'https://t4.ftcdn.net/jpg/02/69/24/41/360_F_269244118_lm8dLQecoBemTtEbjWEzfIaHjN5GFIVq.jpg', 'https://t4.ftcdn.net/jpg/01/25/31/19/360_F_125311972_pKSvvUp8odP1B1rhQ3KCTaL1ky1vaM0G.jpg', 'https://t4.ftcdn.net/jpg/01/13/70/87/360_F_113708770_7mMhmc7RxXk7wAd7jdymyIQ8ojbRz7ex.jpg', 'https://t3.ftcdn.net/jpg/00/68/11/04/360_F_68110419_lGHCvMJvck8LqnSEcrb1wCBDLUdXVDC7.jpg', 'https://t4.ftcdn.net/jpg/08/01/37/45/360_F_801374534_MNYbPiqfiFYyFLQmxISn1jN6m7ROi09E.jpg', 'https://t3.ftcdn.net/jpg/01/43/78/38/360_F_143783868_yqCEhvKfZPtwVdIFB4sJ7rJBRw8tnq3c.jpg', 'https://t4.ftcdn.net/jpg/01/21/64/07/360_F_121640794_IVdmZnDe7bxdKOAFRUGDWb0kA84bfpho.jpg', 'https://t3.ftcdn.net/jpg/02/17/21/68/360_F_217216842_PZlZQ9diA2ot0wNrjP0yOOVdh5lu9a0P.jpg', 'https://t3.ftcdn.net/jpg/08/06/59/10/360_F_806591096_1aiFy3AUIB32TB5V6dLSkFTSWJhoVoqd.jpg', 'https://t3.ftcdn.net/jpg/00/96/95/70/360_F_96957081_unUc73Y46h0NLiRYB7mphAS0dtA1H8B1.jpg', 'https://t3.ftcdn.net/jpg/02/94/32/94/360_F_294329457_fPWcPTcj89vfEowMwztkjkBfxKVrmFFI.jpg', 'https://t4.ftcdn.net/jpg/07/37/34/93/360_F_737349364_7RfA1mryEdtpghHdtzC4owj6h1HUKgdO.jpg', 'https://t3.ftcdn.net/jpg/02/94/71/06/360_F_294710630_eskT9hpN8TvRv0r4uzTFzwa3S8JNov3I.jpg', 'https://t3.ftcdn.net/jpg/01/45/75/64/360_F_145756412_Zbt9XthLRN9aleaNjwns1EBSEuEX5k5U.jpg', 'https://t3.ftcdn.net/jpg/07/29/04/04/360_F_729040473_vshQlLGyiktrLgimgGE9nS6eW3IP5uqd.jpg', 'https://t4.ftcdn.net/jpg/01/91/26/45/360_F_191264566_TBWQBXS63caRi0O04HZmwwLXqzwbc3uw.jpg', 'https://t4.ftcdn.net/jpg/02/48/48/89/360_F_248488928_kv4oSjqcm8hOT5sYSiLlLyChVx1uGgor.jpg']
+    ]
+    # Crear productos en la base de datos
 
-queryset = Products.objects.all()
-x = 0
-for i in queryset:
+
+    for i, (nombre, descripcion) in enumerate(productos_data):
+        categoria = (i % 4) + 1  # Categorías del 1 al 4
+        proveedor1 = random.randint(1, 2)  # Proveedores 1 o 2
+        Products.objects.create(
+            categoria_producto=Categoria_producto.objects.get(pk=categoria),
+            proovedor=Proovedores.objects.get(pk=proveedor1),
+            name_producto=nombre,
+            descripcion=descripcion,
+            precio=round(1.50 + (i * 0.5), 2),  # Precios crecientes
+            cantidad_disponible=random.randint(1, 100),
+        )
+    
+    
+    
+
+    imgs=['https://t4.ftcdn.net/jpg/07/28/08/63/360_F_728086378_00IvjCok2GXYK59sUXKR1d0MqS0Lf6rX.jpg', 'https://t4.ftcdn.net/jpg/00/53/14/41/360_F_53144147_Zx2dgnSeefxIjOQ5cjD4PBdZF4m8M7sm.jpg', 'https://t3.ftcdn.net/jpg/07/87/86/48/360_F_787864833_YWOHUdNX9tIMZ6kONr7P4XrQSTJ6qC2V.jpg', 'https://t3.ftcdn.net/jpg/01/89/79/16/360_F_189791663_HfB3CYN2oi7E2uKG1cY5HRRMFfiVJ3cR.jpg', 'https://t4.ftcdn.net/jpg/03/20/39/81/360_F_320398182_1X1ebszxgKyeS6j291ywWYIw1dfRLETC.jpg', 'https://t3.ftcdn.net/jpg/02/17/92/56/360_F_217925639_0sJqNCRUDHasxPZxFMFCMvMhC5lgPmSG.jpg', 'https://t4.ftcdn.net/jpg/02/95/81/79/360_F_295817910_1Suf7vho9Z55q6PxjY27NRNZj0pdh6jZ.jpg', 'https://t3.ftcdn.net/jpg/02/63/71/90/360_F_263719015_spfvo8bL0nvauJmE7Ldj4z3cvtKFj2hS.jpg', 'https://t4.ftcdn.net/jpg/02/69/24/41/360_F_269244118_lm8dLQecoBemTtEbjWEzfIaHjN5GFIVq.jpg', 'https://t4.ftcdn.net/jpg/01/25/31/19/360_F_125311972_pKSvvUp8odP1B1rhQ3KCTaL1ky1vaM0G.jpg', 'https://t4.ftcdn.net/jpg/01/13/70/87/360_F_113708770_7mMhmc7RxXk7wAd7jdymyIQ8ojbRz7ex.jpg', 'https://t3.ftcdn.net/jpg/00/68/11/04/360_F_68110419_lGHCvMJvck8LqnSEcrb1wCBDLUdXVDC7.jpg', 'https://t4.ftcdn.net/jpg/08/01/37/45/360_F_801374534_MNYbPiqfiFYyFLQmxISn1jN6m7ROi09E.jpg', 'https://t3.ftcdn.net/jpg/01/43/78/38/360_F_143783868_yqCEhvKfZPtwVdIFB4sJ7rJBRw8tnq3c.jpg', 'https://t4.ftcdn.net/jpg/01/21/64/07/360_F_121640794_IVdmZnDe7bxdKOAFRUGDWb0kA84bfpho.jpg', 'https://t3.ftcdn.net/jpg/02/17/21/68/360_F_217216842_PZlZQ9diA2ot0wNrjP0yOOVdh5lu9a0P.jpg', 'https://t3.ftcdn.net/jpg/08/06/59/10/360_F_806591096_1aiFy3AUIB32TB5V6dLSkFTSWJhoVoqd.jpg', 'https://t3.ftcdn.net/jpg/00/96/95/70/360_F_96957081_unUc73Y46h0NLiRYB7mphAS0dtA1H8B1.jpg', 'https://t3.ftcdn.net/jpg/02/94/32/94/360_F_294329457_fPWcPTcj89vfEowMwztkjkBfxKVrmFFI.jpg', 'https://t4.ftcdn.net/jpg/07/37/34/93/360_F_737349364_7RfA1mryEdtpghHdtzC4owj6h1HUKgdO.jpg', 'https://t3.ftcdn.net/jpg/02/94/71/06/360_F_294710630_eskT9hpN8TvRv0r4uzTFzwa3S8JNov3I.jpg', 'https://t3.ftcdn.net/jpg/01/45/75/64/360_F_145756412_Zbt9XthLRN9aleaNjwns1EBSEuEX5k5U.jpg', 'https://t3.ftcdn.net/jpg/07/29/04/04/360_F_729040473_vshQlLGyiktrLgimgGE9nS6eW3IP5uqd.jpg', 'https://t4.ftcdn.net/jpg/01/91/26/45/360_F_191264566_TBWQBXS63caRi0O04HZmwwLXqzwbc3uw.jpg', 'https://t4.ftcdn.net/jpg/02/48/48/89/360_F_248488928_kv4oSjqcm8hOT5sYSiLlLyChVx1uGgor.jpg']
+
+    queryset = Products.objects.all()
+    x = 0
+    for i in queryset:
       
-    i.imagen = imgs[x]
-    print(imgs[x])
-    i.save()
-    x+=1
-    if x == len(imgs):
-        x = 0 
+        i.imagen = imgs[x]
+        print(imgs[x])
+        i.save()
+        x+=1
+        if x == len(imgs):
+            x = 0 
         
-print("Datos iniciales creados con éxito.")
+    print("Datos iniciales creados con éxito.")
+else:
+    print(f'El superusuario "{username}" ya existe.')
+
+
+        

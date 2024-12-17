@@ -2,11 +2,12 @@ import psycopg2
 from psycopg2 import sql
 import os
 
+
 # Variables de conexión
-DATABASE_NAME = "DBFreshshopDeploy3" # Reemplaza con el nombre de tu base de datos
-HOST = "dpg-cssvqu0gph6c7399l27g-a"               # Reemplaza con el host de tu base de datos
-USERNAME = "dbfreshshopdeploy3_user"        # Reemplaza con tu nombre de usuario
-PASSWORD = "8UNBl02v9OYeQB7pQS65EXHy7o4QEG03"     # Reemplaza con tu contraseña
+DATABASE_NAME = os.environ.get('DATABASE_NAME', default='freshshop') # Reemplaza con el nombre de tu base de datos
+HOST = os.environ.get('HOST', default='http://localhost:3000')             # Reemplaza con el host de tu base de datos
+USERNAME = os.environ.get('USERNAME', default='postgres')        # Reemplaza con tu nombre de usuario
+PASSWORD = os.environ.get('PASSWORD', default='080808')      # Reemplaza con tu contraseña
 
 def enable_pg_trgm():
     try:
